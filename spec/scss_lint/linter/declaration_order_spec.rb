@@ -572,4 +572,30 @@ describe SCSSLint::Linter::DeclarationOrder do
 
     it { should report_lint }
   end
+
+  context 'when composes is first' do
+    let(:scss) { <<-SCSS }
+      p {
+        a {
+          composes: className from 'style.css';
+          border: 0;
+        }
+      }
+    SCSS
+
+    it { should_not report_lint }
+  end
+
+  context 'when composes is not first' do
+    let(:linter_config) { { 'DeclarationOrder' => true} }
+    let(:scss) { <<-SCSS }
+      p {
+        a {
+          border: 0;
+          composes: className from 'style.css';
+        }
+      }
+    SCSS
+    it { should report_lint line: 3 }
+  end
 end

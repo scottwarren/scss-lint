@@ -57,6 +57,12 @@ module Sass::Tree
     end
   end
 
+  class ComposesNode
+    def children
+      concat_expr_lists super, expr
+    end
+  end
+
   class DebugNode
     def children
       concat_expr_lists super, expr

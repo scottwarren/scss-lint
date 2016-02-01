@@ -48,6 +48,7 @@ column-count
 column-rule-style
 column-span
 column-fill
+composes
 break-before
 break-after
 break-inside

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'pry'
 
 module SCSSLint
   # Checks the order of nested items within a rule set.
@@ -18,13 +19,14 @@ module SCSSLint
 
     MESSAGE =
       'Rule sets should be ordered as follows: '\
-      '`@extends`, `@includes` without `@content`, ' \
-      'properties, `@includes` with `@content`, ' \
-      'nested rule sets'.freeze
+      '`composes`, `@extends`, `@includes` without ' \
+      '`@content`,  properties, `@includes` with' \
+      '`@content`, nested rule sets'.freeze
 
     MIXIN_WITH_CONTENT = 'mixin_with_content'.freeze
 
     DECLARATION_ORDER = [
+      Sass::Tree::ComposesNode,
       Sass::Tree::ExtendNode,
       Sass::Tree::MixinNode,
       Sass::Tree::PropNode,
@@ -42,6 +44,8 @@ module SCSSLint
                      .map { |n, i| [n, node_declaration_type(n), i] }
 
       sorted_children = children.sort do |(_, a_type, i), (_, b_type, j)|
+        binding.pry
+        print DECLARATION_ORDER.index(a_type)
         [DECLARATION_ORDER.index(a_type), i] <=> [DECLARATION_ORDER.index(b_type), j]
       end
 
@@ -51,6 +55,9 @@ module SCSSLint
     # Find the child that is out of place
     def check_children_order(sorted_children, children)
       sorted_children.each_with_index do |sorted_item, index|
+        # print '-------'
+        # print children.to_yaml if sorted_item == children[index]
+        # print '----'
         next if sorted_item == children[index]
 
         add_lint(sorted_item.first.line,
