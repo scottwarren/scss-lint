@@ -59,7 +59,7 @@ module Sass::Tree
 
   class ComposesNode
     def children
-      concat_expr_lists super, expr
+      concat_expr_lists super, extract_script_nodes(value)
     end
   end
 

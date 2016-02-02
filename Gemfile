@@ -10,3 +10,4 @@ gem 'rubocop', '0.36.0'
 gem 'travis', '~> 1.7'
 
 gem 'coveralls', require: false
+gem 'pry'

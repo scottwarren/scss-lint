@@ -26,7 +26,6 @@ module SCSSLint
     MIXIN_WITH_CONTENT = 'mixin_with_content'.freeze
 
     DECLARATION_ORDER = [
-      Sass::Tree::ComposesNode,
       Sass::Tree::ExtendNode,
       Sass::Tree::MixinNode,
       Sass::Tree::PropNode,
@@ -34,7 +33,13 @@ module SCSSLint
       Sass::Tree::RuleNode,
     ].freeze
 
+    CSS_MODULE = [
+      'composes',
+    ].freeze
+
     def important_node?(node)
+      print node.name
+      # binding.pry if node.name.any === "composes"
       DECLARATION_ORDER.include?(node.class)
     end
 
@@ -44,8 +49,6 @@ module SCSSLint
                      .map { |n, i| [n, node_declaration_type(n), i] }
 
       sorted_children = children.sort do |(_, a_type, i), (_, b_type, j)|
-        binding.pry
-        print DECLARATION_ORDER.index(a_type)
         [DECLARATION_ORDER.index(a_type), i] <=> [DECLARATION_ORDER.index(b_type), j]
       end
 

@@ -92,6 +92,7 @@ before
 content
 first-letter
 first-line
+local
 placeholder
 selection
 shadow
